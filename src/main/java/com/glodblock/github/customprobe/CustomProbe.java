@@ -3,7 +3,6 @@ package com.glodblock.github.customprobe;
 import com.glodblock.github.customprobe.command.CustomProbeCommand;
 import com.glodblock.github.customprobe.provider.ProviderRegister;
 import com.glodblock.github.customprobe.proxy.CommonProxy;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = CustomProbe.MODID, version = CustomProbe.VERSION, useMetadata = true)
+@Mod(modid = CustomProbe.MODID, version = CustomProbe.VERSION, useMetadata = true, acceptedMinecraftVersions = "[1.12.2]", dependencies = "required-after:theoneprobe")
 public class CustomProbe {
 
     public static final String MODID = "customprobe";
@@ -57,10 +56,6 @@ public class CustomProbe {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new CustomProbeCommand());
-    }
-
-    public static ResourceLocation resource(String path) {
-        return new ResourceLocation(MODID, path);
     }
 
     public static File getScriptRootFile() {
