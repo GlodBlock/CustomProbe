@@ -10,27 +10,28 @@ import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nonnull;
 
-public class CommandNBT extends CommandBase {
+public class CommandTileName extends CommandBase {
 
     @Nonnull
     @Override
     public String getName() {
-        return "nbt";
+        return "tileEntityName";
     }
 
     @Nonnull
     @Override
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/customprobe nbt";
+        return "/customprobe tileEntityName";
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
         if (sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
-            CustomProbe.proxy.netHandler.sendTo(new SPacketMouseTarget(1), player);
+            CustomProbe.proxy.netHandler.sendTo(new SPacketMouseTarget(2), player);
         } else {
             sender.sendMessage(new TextComponentString("Command cannot be run on the server"));
         }
     }
+
 }

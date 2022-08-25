@@ -1,2 +1,4 @@
-customprobe.command.usage=Custom Probe Command
+customprobe.command.usage=/customprobe
 customprobe.command.nbtdisplay=NBT Info:
+customprobe.command.tilenamedisplay=Tile class name: %s
+customprobe.command.reload=Scripts are ready to reload, it may lag a bit.

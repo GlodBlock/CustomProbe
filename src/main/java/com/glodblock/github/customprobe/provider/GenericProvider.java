@@ -28,12 +28,20 @@ public class GenericProvider implements IProbeInfoProvider {
     private static final HashSet<String> brokenScripts = new HashSet<>();
 
     private IValidCheckable info;
-    private final String script;
+    private String script;
     private final String id;
 
     public GenericProvider(File scriptFile) {
         this.script = FileStreamReader.readFromFile(scriptFile);
         this.id = scriptFile.getName();
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
+        Bindings bindings = engine.createBindings();
+        try {
+            engine.eval(script, bindings);
+            allScriptsEngine.put(this.id, engine);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -98,6 +106,16 @@ public class GenericProvider implements IProbeInfoProvider {
             CustomProbe.log.error("It won't be reload until a game restart.");
             brokenScripts.add(this.id);
         }
+    }
+
+    public void reSet(String newScript) {
+        this.script = newScript;
+        this.info = null;
+    }
+
+    public static void reload() {
+        allScriptsEngine.clear();
+        brokenScripts.clear();
     }
 
 }

@@ -8,13 +8,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.List;
 
 public class CustomProbeCommand extends CommandTreeBase {
 
     public CustomProbeCommand() {
         addSubcommand(new CommandNBT());
+        addSubcommand(new CommandTileName());
+        addSubcommand(new CommandReload());
     }
 
     @Nonnull
@@ -37,7 +38,6 @@ public class CustomProbeCommand extends CommandTreeBase {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        System.out.print(Arrays.toString(args) + "\n");
         super.execute(server, sender, args);
     }
 }

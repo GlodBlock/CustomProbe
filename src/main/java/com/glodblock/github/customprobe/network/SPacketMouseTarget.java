@@ -12,15 +12,23 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class SPacketMouseTarget implements IMessage {
 
+    private int mode;
+
     public SPacketMouseTarget() {
+    }
+
+    public SPacketMouseTarget(int mode) {
+        this.mode = mode;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        this.mode = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
+        buf.writeInt(this.mode);
     }
 
     public static class Handler implements IMessageHandler<SPacketMouseTarget, IMessage> {
@@ -30,7 +38,7 @@ public class SPacketMouseTarget implements IMessage {
             EntityPlayerSP player = Minecraft.getMinecraft().player;
             RayTraceResult pos = Minecraft.getMinecraft().objectMouseOver;
             if (pos != null && pos.typeOfHit == RayTraceResult.Type.BLOCK) {
-                CPacketTileRequest packet = new CPacketTileRequest(pos.getBlockPos());
+                CPacketTileRequest packet = new CPacketTileRequest(pos.getBlockPos(), message.mode);
                 CustomProbe.proxy.netHandler.sendToServer(packet);
             }
             else {
