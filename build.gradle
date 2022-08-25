@@ -19,19 +19,24 @@ buildscript {
             name "forge"
             url "http://files.minecraftforge.net/maven"
         }
+        maven {
+            url = 'https://repo.spongepowered.org/maven'
+        }
         mavenLocal()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'idea'
 
-version = "1.0.0"
-group = "immchem"
-archivesBaseName = "Immersive Chemical"
+version = "0.1.00"
+group = "customprobe"
+archivesBaseName = "Custom Probe"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -45,11 +50,22 @@ repositories {
     maven { url "https://minecraft.curseforge.com/api/maven/" }
     maven { url "https://maven.tterrag.com" }
     maven { url "http://maven.covers1624.net/" }
+    maven { url 'https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all'}
 }
 
 dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.15.0.293"
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.22-13"
+    compile 'org.codehaus.groovy:groovy-ant:3.0.11'
+    compile 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
+    compile 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    compile 'org.codehaus.groovy:groovy-macro:3.0.11'
+    compileOnly "curse.maven:gregtech-ce-unofficial-557242:3784798"
+
+    shadow 'org.codehaus.groovy:groovy-ant:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-astbuilder:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-jsr223:3.0.11'
+    shadow 'org.codehaus.groovy:groovy-macro:3.0.11'
 }
 
 minecraft {
@@ -64,6 +80,18 @@ jar {
     manifest {
         attributes 'FMLCorePluginContainsFMLMod': 'true'
     }
+}
+
+shadowJar {
+    baseName = archivesBaseName
+    version = version
+    configurations = [project.configurations.shadow]
+}
+
+tasks.build.dependsOn shadowJar
+
+artifacts {
+    archives shadowJar
 }
 
 processResources {

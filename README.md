@@ -1,3 +1,3 @@
-##CustomProbe
+## CustomProbe
 
-Allow custom TOP display via javascript
+Allow custom TOP display via groovy.
