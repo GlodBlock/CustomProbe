@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 
 import javax.script.*;
 import java.io.File;
@@ -34,7 +35,7 @@ public class GenericProvider implements IProbeInfoProvider {
     public GenericProvider(File scriptFile) {
         this.script = FileStreamReader.readFromFile(scriptFile);
         this.id = scriptFile.getName();
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
+        ScriptEngine engine = new GroovyScriptEngineImpl() ;
         Bindings bindings = engine.createBindings();
         try {
             engine.eval(script, bindings);

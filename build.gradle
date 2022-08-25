@@ -81,7 +81,10 @@ minecraft {
 jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)) {
+            include 'org/codehaus/groovy/**'
+            include 'org/apache/groovy/**'
             include 'groovy/**'
+            include 'groovy*/**'
         }
     }
     manifest {
