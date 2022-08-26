@@ -18,7 +18,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 
-import javax.script.*;
+import javax.script.Bindings;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,14 +38,7 @@ public class GenericProvider implements IProbeInfoProvider {
     public GenericProvider(File scriptFile) {
         this.script = FileStreamReader.readFromFile(scriptFile);
         this.id = scriptFile.getName();
-        ScriptEngine engine = new GroovyScriptEngineImpl() ;
-        Bindings bindings = engine.createBindings();
-        try {
-            engine.eval(script, bindings);
-            allScriptsEngine.put(this.id, engine);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
+        compileScript();
     }
 
     @Override
@@ -71,14 +67,7 @@ public class GenericProvider implements IProbeInfoProvider {
         }
 
         if (!allScriptsEngine.containsKey(this.id)) {
-            ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
-            Bindings bindings = engine.createBindings();
-            try {
-                engine.eval(script, bindings);
-                allScriptsEngine.put(this.id, engine);
-            } catch (ScriptException e) {
-                e.printStackTrace();
-            }
+            compileScript();
         }
 
         Invocable invocable = (Invocable) allScriptsEngine.get(this.id);
@@ -117,6 +106,17 @@ public class GenericProvider implements IProbeInfoProvider {
     public static void reload() {
         allScriptsEngine.clear();
         brokenScripts.clear();
+    }
+
+    private void compileScript() {
+        ScriptEngine engine = new GroovyScriptEngineImpl();
+        Bindings bindings = engine.createBindings();
+        try {
+            engine.eval(script, bindings);
+            allScriptsEngine.put(this.id, engine);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
 }
